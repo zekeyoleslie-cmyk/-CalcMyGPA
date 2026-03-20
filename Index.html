@@ -1,0 +1,282 @@
+<!DOCTYPE html>  
+<html>  
+<head>    
+    <title>GPA Calculator</title>  
+    <style>  
+        body {  
+            font-family: Arial, sans-serif;  
+            background: linear-gradient(to right, #74ebd5, #acb6e5);  
+            padding: 30px;  
+            color: #333;  
+        }  
+  
+        h1, h2 {  
+            text-align: center;  
+            color: #2c3e50;  
+        }  
+  
+        .card {  
+            background-color: transparent;  
+            padding: 20px 30px;  
+            margin: 20px auto;  
+            border-radius: 15px;  
+            box-shadow: none;  
+            max-width: 900px;  
+        }  
+  
+        table {  
+            width: 100%;  
+            border-collapse: collapse;  
+            margin-top: 15px;  
+        }  
+  
+        td {  
+            padding: 8px;  
+            text-align: center;  
+        }  
+  
+        input[type=number] {  
+            width: 80%;  
+            padding: 8px;  
+            border-radius: 8px;  
+            border: 1px solid #ccc;  
+            text-align: center;  
+            background-color: #f0f0f0;  
+        }  
+  
+        button {  
+            background-color: #3498db;  
+            color: white;  
+            border: none;  
+            padding: 12px 25px;  
+            margin: 5px 3px;  
+            border-radius: 10px;  
+            font-size: 16px;  
+            cursor: pointer;  
+            transition: 0.3s;  
+        }  
+  
+        button:hover {  
+            background-color: #2980b9;  
+        }  
+  
+        #result {  
+            font-size: 24px;  
+            font-weight: bold;  
+            color: #e74c3c;  
+            text-align: center;  
+            margin-top: 15px;  
+        }  
+  
+        #historyTable {  
+            border-radius: 10px;  
+            overflow: hidden;  
+            width: 100%;  
+            border-collapse: collapse;  
+        }  
+  
+        #historyTable th, #historyTable td {  
+            border: 1px solid #ccc;  
+            padding: 8px;  
+        }  
+  
+        .button-row {  
+            text-align: center;  
+            margin-top: 15px;  
+          @media (max-width: 600px) {  
+    table, td, th, input, button {  
+        width: 100%;  
+        display: block;  
+        margin: 5px 0;  
+    }  
+}  
+        }  
+      body.dark-theme {  
+    background: #1e1e2f;  
+    color: #f0f0f0;  
+}  
+  
+/* rest of dark theme CSS */  
+body.dark-theme .card { background-color: #2c2c3e; }  
+body.dark-theme input[type=text], body.dark-theme input[type=number] { background-color: #3a3a4e; color: #f0f0f0; border: 1px solid #555; }  
+body.dark-theme button { background-color: #5a5aff; color: #fff; }  
+body.dark-theme button:hover { background-color: #3f3fff; }  
+body.dark-theme #result { color: #ff6b6b; }  
+body.dark-theme #historyTable th, body.dark-theme #historyTable td { border: 1px solid #555; color: #f0f0f0; }  
+    </style>  
+</head>  
+  
+<body>  
+  
+<div class="card">  
+    <h1>GPA Calculator</h1>  
+  
+    <table id="courseTable">  
+        <tr id="courseRow1">  
+            <td>Course1</td>  
+            <td><input type="number" id="ca1" placeholder="CA"></td>  
+            <td><input type="number" id="exam1" placeholder="Exam"></td>  
+            <td><input type="number" id="credit1" placeholder="Credit"></td>  
+        </tr>  
+        <tr id="courseRow2">  
+            <td>Course2</td>  
+            <td><input type="number" id="ca2" placeholder="CA"></td>  
+            <td><input type="number" id="exam2" placeholder="Exam"></td>  
+            <td><input type="number" id="credit2" placeholder="Credit"></td>  
+        </tr>  
+        <tr id="courseRow3">  
+            <td>Course3</td>  
+            <td><input type="number" id="ca3" placeholder="CA"></td>  
+            <td><input type="number" id="exam3" placeholder="Exam"></td>  
+            <td><input type="number" id="credit3" placeholder="Credit"></td>  
+        </tr>  
+        <tr id="courseRow4">  
+            <td>Course4</td>  
+            <td><input type="number" id="ca4" placeholder="CA"></td>  
+            <td><input type="number" id="exam4" placeholder="Exam"></td>  
+            <td><input type="number" id="credit4" placeholder="Credit"></td>  
+        </tr>  
+        <tr id="courseRow5">  
+            <td>Course5</td>  
+            <td><input type="number" id="ca5" placeholder="CA"></td>  
+            <td><input type="number" id="exam5" placeholder="Exam"></td>  
+            <td><input type="number" id="credit5" placeholder="Credit"></td>  
+        </tr>  
+    </table>  
+  
+    <div class="button-row">  
+        <button onclick="addCourse()">Add Course</button>  
+        <button onclick="removeCourse()">Remove Course</button>  
+        <button onclick="calculateGPA()">Calculate GPA</button>  
+        <button onclick="downloadHistory()">Download History</button>  
+        <button onclick="location.reload()">Refresh</button>  
+      <button onclick="toggleDarkMode()">Toggle Dark Mode</button>  
+    </div>  
+  
+    <div id="result">Your GPA will appear here</div>  
+</div>  
+  
+<div class="card">  
+    <h2>History</h2>  
+    <table id="historyTable">  
+        <tr>  
+            <th>#</th>  
+            <th>Courses</th>  
+            <th>GPA</th>  
+            <th>Letter Grade</th>  
+        </tr>  
+    </table>  
+</div>  
+  
+<script>  
+let courseCount = 5;  
+let historyCount = 0;  
+  
+function addCourse() {  
+    courseCount++;  
+    let table = document.getElementById("courseTable");  
+    let row = document.createElement("tr");  
+    row.id = `courseRow${courseCount}`;  
+    row.innerHTML = `  
+        <td>Course${courseCount}</td>  
+        <td><input type="number" id="ca${courseCount}" placeholder="CA"></td>  
+        <td><input type="number" id="exam${courseCount}" placeholder="Exam"></td>  
+        <td><input type="number" id="credit${courseCount}" placeholder="Credit"></td>  
+    `;  
+    table.appendChild(row);  
+}  
+  
+function removeCourse() {  
+    if (courseCount > 0) {  // allow removing all courses  
+        let row = document.getElementById(`courseRow${courseCount}`);  
+        if (row) row.remove();  
+        courseCount--;  
+    }  
+}  
+  
+function calculateGPA() {  
+    let totalPoints = 0;  
+    let totalCredits = 0;  
+  
+    for (let i = 1; i <= courseCount; i++) {  
+        let ca = parseFloat(document.getElementById("ca" + i)?.value) || 0;  
+        let exam = parseFloat(document.getElementById("exam" + i)?.value) || 0;  
+        let credit = parseFloat(document.getElementById("credit" + i)?.value) || 0;  
+        if (credit === 0) continue;  
+  
+        let score = ca + exam;  
+        let gradePoint = 0;  
+        if (score >= 80) gradePoint = 4.0;  
+        else if (score >= 70) gradePoint = 3.5;  
+        else if (score >= 60) gradePoint = 3.0;  
+        else if (score >= 55) gradePoint = 2.5;  
+        else if (score >= 50) gradePoint = 2.0;  
+        else gradePoint = 0;  
+  
+        totalPoints += gradePoint * credit;  
+        totalCredits += credit;  
+    }  
+  
+    let gpa = totalCredits ? totalPoints / totalCredits : 0;  
+  
+    let letter = '';  
+    if (gpa >= 4.0) letter = 'A';  
+    else if (gpa >= 3.5) letter = 'B+';  
+    else if (gpa >= 3.0) letter = 'B';  
+    else if (gpa >= 2.5) letter = 'C+';  
+    else if (gpa >= 2.0) letter = 'C';  
+    else letter = 'F';  
+  
+    document.getElementById("result").innerText = `GPA: ${gpa.toFixed(2)} (${letter})`;  
+  
+    historyCount++;  
+    let table = document.getElementById("historyTable");  
+    let row = document.createElement("tr");  
+    row.innerHTML = `<td>${historyCount}</td><td>${courseCount}</td><td>${gpa.toFixed(2)}</td><td>${letter}</td>`;  
+  if (ca < 0 || ca > 100 || exam < 0 || exam > 100) {  
+    alert(`Invalid scores in Course ${i}. Please enter values between 0 and 100.`);  
+    return;  
+}  
+    table.appendChild(row);  
+}  
+  
+function downloadHistory() {  
+    let table = document.getElementById("historyTable");  
+    let csv = [];  
+    for (let i = 0; i < table.rows.length; i++) {  
+        let row = [], cols = table.rows[i].cells;  
+        for (let j = 0; j < cols.length; j++) {  
+            row.push(cols[j].innerText);  
+        }  
+        csv.push(row.join(","));  
+    }  
+    let csvFile = new Blob([csv.join("\n")], { type: "text/csv" });  
+    let downloadLink = document.createElement("a");  
+    downloadLink.download = "gpa_history.csv";  
+    downloadLink.href = window.URL.createObjectURL(csvFile);  
+    downloadLink.style.display = "none";  
+    document.body.appendChild(downloadLink);  
+    downloadLink.click();  
+}  
+  function toggleDarkMode() {  
+    document.body.classList.toggle("dark-theme");  
+  
+    // Optional: save preference in localStorage  
+    if (document.body.classList.contains("dark-theme")) {  
+        localStorage.setItem("theme", "dark");  
+    } else {  
+        localStorage.setItem("theme", "light");  
+    }  
+}  
+  
+// Load saved theme on page load  
+window.onload = function() {  
+    let savedTheme = localStorage.getItem("theme");  
+    if (savedTheme === "dark") {  
+        document.body.classList.add("dark-theme");  
+    }  
+};  
+</script>  
+  
+</body>  
+</html>  
