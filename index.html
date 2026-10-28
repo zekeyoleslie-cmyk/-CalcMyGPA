@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="University GPA Calculator on a 4.0 scale">
+    <title>GPA Calculator | University</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Rename styles.txt to styles.css -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <span class="brand-mark">G</span>
+        <span class="brand-name">GPA<span>Calc</span></span>
+    </div>
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg id="iconMoon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg id="iconSun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+</header>
+
+<main class="container">
+
+    <section class="hero">
+        <h1>Calculate your <span class="grad">GPA</span> in seconds</h1>
+        <p>Enter your Continuous Assessment (CA), Exam score and credit units for each course. Your grade is worked out on the university 4.0 scale.</p>
+    </section>
+
+    <div class="layout">
+
+        <!-- Calculator -->
+        <section class="card" aria-labelledby="calcTitle">
+            <div class="card-head">
+                <h2 id="calcTitle">Courses</h2>
+                <span class="hint">CA /<b id="caMaxLabel">30</b> &nbsp;•&nbsp; Exam /<b id="examMaxLabel">70</b></span>
+            </div>
+
+            <div class="table-wrap">
+                <table id="courseTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Course name</th>
+                            <th>CA</th>
+                            <th>Exam</th>
+                            <th>Credits</th>
+                            <th>Total</th>
+                            <th>Grade</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="courseBody"></tbody>
+                </table>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-ghost" id="addBtn">+ Add course</button>
+                <button class="btn btn-ghost" id="resetBtn">Reset</button>
+                <button class="btn btn-primary" id="calcBtn">Calculate GPA</button>
+            </div>
+
+            <div class="error" id="errorBox" role="alert" hidden></div>
+        </section>
+
+        <!-- Result + Scale -->
+        <aside class="side">
+            <section class="card result-card" aria-live="polite">
+                <p class="label">Your GPA</p>
+                <div class="gpa-ring" id="gpaRing">
+                    <div class="gpa-inner">
+                        <span id="gpaValue">0.00</span>
+                        <small>out of 4.00</small>
+                    </div>
+                </div>
+                <div class="chips">
+                    <span class="chip" id="letterChip">Grade: –</span>
+                    <span class="chip" id="classChip">Class: –</span>
+                </div>
+                <div class="stats">
+                    <div><b id="statCredits">0</b><span>Total credits</span></div>
+                    <div><b id="statPoints">0</b><span>Quality points</span></div>
+                    <div><b id="statCourses">0</b><span>Courses</span></div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Grading scale</h2>
+                <table class="scale">
+                    <thead><tr><th>Score</th><th>Grade</th><th>Points</th></tr></thead>
+                    <tbody id="scaleBody"></tbody>
+                </table>
+            </section>
+        </aside>
+    </div>
+
+    <!-- History -->
+    <section class="card">
+        <div class="card-head">
+            <h2>History</h2>
+            <div class="actions tight">
+                <button class="btn btn-ghost" id="downloadBtn">Download CSV</button>
+                <button class="btn btn-danger" id="clearBtn">Clear</button>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table id="historyTable">
+                <thead>
+                    <tr><th>#</th><th>Date</th><th>Courses</th><th>Credits</th><th>GPA</th><th>Grade</th></tr>
+                </thead>
+                <tbody id="historyBody"></tbody>
+            </table>
+        </div>
+        <p class="empty" id="emptyHistory">No calculations yet. Your results will appear here.</p>
+    </section>
+
+</main>
+
+<footer class="footer">
+    <p>&copy; <span id="year"></span> GPA Calculator. Built for university students.</p>
+</footer>
+
+<!-- Rename script.txt to script.js -->
+<script src="script.js"></script>
+</body>
+</html>
